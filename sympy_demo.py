@@ -1,64 +1,22 @@
 import sympy
+from DPLL import DPLL
 # Define some symbols
-A, B, C, D = sympy.symbols('A B C D')
+A, B, C, D, E, F = sympy.symbols('A B C D E F')
 
-# Define some logical expressions
-expr1 = (A|B) & (A|C)
-expr2 = sympy.Or(expr1,C)
-expr3 = B >> (A | D)
+expr1 = sympy.Equivalent(A,(C | E))
+expr2 = sympy.Implies(E,D)
+expr3 = sympy.Implies((B & F),sympy.Not(C))
+expr4 = sympy.Implies(E,C)
+expr5 = C >> F 
+expr6 = C >> B 
 
-zi_expr = (expr1 ^C) | expr3
+pre_KB = [expr1,expr2,expr3,expr4,expr5,expr6]
+KB = [sympy.to_cnf(expr) for expr in pre_KB]
 
+symbols = [A, B, C, D, E, F]
 # Print the expressions
-print("Expression 1:", expr1)
-print("Expression 2:", expr2)
-print("Expression 3:", expr3)
+for i,expr in enumerate(KB):
+    print(f"Expression {i} {expr}")
 
-# Evaluate the expressions for some truth values
-truth_values = {
-    A: True,
-    B: False,
-    C: True
-}
-"""
-print("Expression 1 evaluates to:", expr1.subs(truth_values))
-print("Expression 2 evaluates to:", expr2.subs(truth_values))
-print("Expression 3 evaluates to:", expr3.subs(truth_values))
-"""
-# Convert the expressions to CNF and DNF forms
-cnf_form = sympy.to_cnf(zi_expr)
-dnf_form = sympy.to_dnf(expr3)
-
-"""
-print("CNF form of expression 2:", cnf_form)
-print("DNF form of expression 3:", dnf_form)
-"""
-#print("Expression 1 evaluates to:", cnf_form.subs(truth_values))
-
-KB = [expr1,expr2,expr3]
 print(f"original {KB=}")
-
-# Checking sat
-for expr in KB[:]:
-    #symbols = sorted([str(x) for x in expr.atoms()])
-    print(expr.atoms())
-    for arg in expr.atoms():
-        truth_table = {k:(True if k==arg else False) for k in expr.atoms()}
-        #print(f"{expr=} {truth_table=}")
-        if expr.subs(truth_table) == True:
-            print(f"{expr} only need {arg} True ")
-            try:
-                KB.remove(expr)
-            except ValueError:
-                pass 
-
-            KB.append(arg)
-            break
-            
-
-#removes identical values 
-KB = list(dict.fromkeys(KB))
-print(f" final {KB=}")
-#Pure symbol
-
-#Unit clause heuristic
+print(f"{DPLL(KB,symbols)=}")
