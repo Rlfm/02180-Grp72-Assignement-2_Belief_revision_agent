@@ -17,6 +17,9 @@ symbols = [A, B, C, D, E, F]
 # Print the expressions
 for i,expr in enumerate(KB):
     print(f"Expression {i} {expr}")
+    l = expr.args[1]
 
 print(f"original {KB=}")
 print(f"{DPLL(KB,symbols)=}")
+k = DPLL(KB,symbols)
+print (k)
