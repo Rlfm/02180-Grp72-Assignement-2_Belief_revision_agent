@@ -8,6 +8,11 @@ from itertools import chain, combinations, product
  #   return sympy.And(*K)
 
 ex1 = expr1
+""""
+function, which given a set of belief bases K, and a sentence s 
+returns a set K' containing all k in K which do not imply s
+
+"""
 def _remove_implications(K, s):
     s = [sympy.Not(s)]
     candidates = []
@@ -32,10 +37,15 @@ def intersection(r1, r2):
 def partial_meet(KB, s):
     # Limit removals
     removals = 0
+
+    # empty list to store candidates for remainder set
     candidates = []
+
+    # while no candidstes are found, increase removals from belief base 
     while (len(candidates) == 0): 
         removals += 1
-    
+
+        # compute powerset of KB with removals
         p = powerset(KB, len(KB) - removals)
 
         candidates = (_remove_implications(p, s))
@@ -43,6 +53,7 @@ def partial_meet(KB, s):
     # Remove list in candidates that are strictly included in other list in candidates, to find remainders 
     remainders = [S for i, S in enumerate(candidates) if not any(set(S).issubset(set(T)) and set(S)!=set(T) for T in candidates[i+1:])]
 
+    # compute intersection of first two remainders
     contraction = intersection(remainders[0], remainders[1])
 
     return contraction
