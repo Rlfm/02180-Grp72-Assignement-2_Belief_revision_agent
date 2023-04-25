@@ -8,6 +8,8 @@ from itertools import chain, combinations, product
  #   return sympy.And(*K)
 
 ex1 = expr1
+
+
 """"
 function, which given a set of belief bases K, and a sentence s 
 returns a set K' containing all k in K which do not imply s
