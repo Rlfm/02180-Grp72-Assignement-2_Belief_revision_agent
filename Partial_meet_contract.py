@@ -4,11 +4,6 @@ from DPLL import DPLL
 from entrenchment import reorder_expressions
 from itertools import chain, combinations, product
 
-#def meet(K):
- #   return sympy.And(*K)
-
-ex1 = expr1
-
 
 """"
 function, which given a set of belief bases K, and a sentence s 
@@ -36,12 +31,37 @@ def intersection(r1, r2):
     r3 = [value for value in r1 if value in r2]
     return r3
 
+"""
+Partial meet conatraction on belief base. 
+Returns contraction by a sentence s, of belief base KB. 
+
+"""
+
 def partial_meet(KB, s):
+
+    s = sympy.to_cnf(s)
+    print("s")
+    print(s)
+
+    p_entrench = KB.index(s)
+    print("kb")
+    KB[p_entrench:p_entrench+1] = []
+
+    print(KB)
+
+    reorder_expressions(KB)
+
+
+    print(KB)
+
     # Limit removals
     removals = 0
 
     # empty list to store candidates for remainder set
     candidates = []
+
+    if len(KB) == 1:
+        return _remove_implications
 
     # while no candidstes are found, increase removals from belief base 
     while (len(candidates) == 0): 
@@ -60,8 +80,7 @@ def partial_meet(KB, s):
 
     return contraction
 
-print(KB)
-print(partial_meet(KB, ex1))
+print(partial_meet(KB, expr1))
     
     
 
