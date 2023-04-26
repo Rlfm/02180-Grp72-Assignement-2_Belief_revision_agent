@@ -4,6 +4,28 @@ from DPLL import DPLL
 from entrenchment import reorder_expressions
 from itertools import chain, combinations, product
 
+#def meet(K):
+ #   return sympy.And(*K)
+
+
+def AGM_Rationality_Postulates_for_contraction(KB, expr, KB_post_contraction):
+    """
+    functions that asses that AGM postulates are respected for the present contraction 
+    """
+    expr = sympy.to_cnf(expr)
+    # Success
+    assert expr not in KB_post_contraction, f"{expr} is still part of KB after contraction"
+
+    # Inclusion 
+    assert len([x for x in KB_post_contraction if x in KB]) == len(KB_post_contraction), "KB after contraction is not a subset of original KB"
+
+    # Vacuity 
+    if expr not in KB:
+        assert KB == KB_post_contraction, f"KB was modified but {expr} wasn't in KB"
+
+    # Extensionality
+
+
 
 """"
 function, which given a set of belief bases K, and a sentence s 
@@ -78,8 +100,11 @@ def partial_meet(KB, s):
     # compute intersection of first two remainders
     contraction = intersection(remainders[0], remainders[1])
 
+    AGM_Rationality_Postulates_for_contraction(KB,s,contraction)
+
     return contraction
 
+print(f"{KB=} and {expr1=}")
 print(partial_meet(KB, expr1))
     
     

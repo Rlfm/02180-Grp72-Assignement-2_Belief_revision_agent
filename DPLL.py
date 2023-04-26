@@ -6,6 +6,10 @@ fmt = '[%(levelname)s] {%(filename)s, %(funcName)s} %(asctime)s - %(message)s'
 logging.basicConfig(level =level, format=fmt)
 
 def FIND_PURE(cnf_KB,symbols):
+    """
+    Take a cnf Knowledge base and tries to find pure symbols by looking for ~{symbol} in expressions
+    return the first PURE symbol found or False
+    """
     for symb in symbols:
         truth_table = {symb:True}
         try:
@@ -21,6 +25,10 @@ def FIND_PURE(cnf_KB,symbols):
     return False
 
 def FIND_UNIT(cnf_KB,symbols):
+    """
+    Take a cnf Knowledge base and tries to find unit clauses by looking for expression with 1 atom
+    return the first unit clause found (and if negation = True or False) or False
+    """
     for expr in cnf_KB:
         if len(expr.atoms()) == 1:
             
@@ -34,7 +42,12 @@ def FIND_UNIT(cnf_KB,symbols):
     return False
 
 def DPLL(cnf_KB,symbols,model={}):
-    
+    """
+    DPLL algorithm, tries applying model based on the different atoms of each expression until it reaches an empty model
+    Speed up by FIND_UNIT() and FIND_PURE()
+    If FIND_UNIT() and FIND_PURE() return False, then a arbitrary symbol is tested 
+    """
+
     logging.debug(cnf_KB)
     if len(cnf_KB) == 0:
         return True,model
@@ -66,6 +79,7 @@ def DPLL(cnf_KB,symbols,model={}):
         return DPLL_sat_return
        
     elif PURE_SYMBOL != False:
+        
         P = PURE_SYMBOL
         logging.debug(f"PURE SYMBOL chosing {P=}") 
         model[P] = True

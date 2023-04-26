@@ -1,5 +1,5 @@
 import sympy
-from sympy_demo import KB, symbols, ex1
+from sympy_demo import KB, symbols, expr1
 from DPLL import DPLL
 from itertools import chain, combinations, product
 from entrenchment import reorder_expressions
@@ -36,12 +36,10 @@ def entrenchment_contract(l, p, symbols):
            print(q)
            if q in _KB and _KB.index(q) < p_entrench: 
                contraction.append(q)
+
     print(contraction)
 
 
-
-
-
-entrenchment_contract(KB, ex1, symbols)
+entrenchment_contract(KB, expr1, symbols)
 
 
