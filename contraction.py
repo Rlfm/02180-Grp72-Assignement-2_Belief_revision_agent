@@ -53,7 +53,33 @@ def intersection(r1, r2):
     r3 = [value for value in r1 if value in r2]
     return r3
 
+def selection_function(KB, remainders):
+    """
+    Selection function, returns the two best remainders based on entrencment ordering.
+    """
 
+    # reorder the beliefs in base, from least to most entrenched
+    # the score of each belief correspond to its index in the reordered belief base
+    entrenchment_order = reorder_expressions(KB)
+    entrenchment_order.reverse()
+
+    scores = []
+    for r in remainders:
+        # r_max_score; the score of most entreched belief contained in r 
+        r_max_score = max([entrenchment_order.index(s) for s in r]) if r else 0
+        # r_avg_score; avareage of scores of all beliefs in r
+        r_avg_score = sum([entrenchment_order.index(s) for s in r]) / len(r) if r else 0
+
+        # total score of r, is a weitghted sum  of r_max_score and r_avg_score
+        score = 0.6 * r_max_score + 0.4 * r_avg_score 
+        scores.append((r, score))
+    
+    # the remainders er sorted based scores
+    scores.sort(key=lambda x: x[1], reverse=True)
+
+    # two highest scoring remainders are returned
+    best_remainders = [r for r, _ in scores[:2]]
+    return best_remainders
 
 
 def contract(KB, s):
@@ -66,10 +92,8 @@ def contract(KB, s):
 
     KB_copy = KB.copy()
 
-    p_entrench = KB_copy.index(s)
-    KB_copy[p_entrench:p_entrench+1] = []
-
-    reorder_expressions(KB_copy)
+    _s = KB_copy.index(s)
+    KB_copy[_s:_s+1] = []
 
     # Limit removals
     removals = 0
@@ -92,14 +116,17 @@ def contract(KB, s):
     # Remove list in candidates that are strictly included in other list in candidates, to find remainders 
     remainders = [S for i, S in enumerate(candidates) if not any(set(S).issubset(set(T)) and set(S)!=set(T) for T in candidates[i+1:])]
 
-    # compute intersection of first two remainders
-    contraction = intersection(remainders[0], remainders[1])
+    # selection function returns two remainders for contraction
+    best_remainders = selection_function(KB, remainders)
+
+    contraction = intersection(best_remainders[0], best_remainders[1])
 
     AGM_Rationality_Postulates_for_contraction(KB, s, contraction)
 
     return contraction
 
-#print(f"{KB=} and {expr1=}")
+
+print(f"{KB=} and {expr1=}")
 print(contract(KB, expr1))
     
     
