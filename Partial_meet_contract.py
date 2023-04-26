@@ -27,12 +27,13 @@ def AGM_Rationality_Postulates_for_contraction(KB, expr, KB_post_contraction):
 
 
 
-""""
+"""
 function, which given a set of belief bases K, and a sentence s 
 returns a set K' containing all k in K which do not imply s
 
 """
 def _remove_implications(K, s):
+
     s = [sympy.Not(s)]
     candidates = []
     for k in K:
@@ -62,19 +63,12 @@ Returns contraction by a sentence s, of belief base KB.
 def partial_meet(KB, s):
 
     s = sympy.to_cnf(s)
-    print("s")
-    print(s)
+  
 
     p_entrench = KB.index(s)
-    print("kb")
     KB[p_entrench:p_entrench+1] = []
 
-    print(KB)
-
     reorder_expressions(KB)
-
-
-    print(KB)
 
     # Limit removals
     removals = 0
