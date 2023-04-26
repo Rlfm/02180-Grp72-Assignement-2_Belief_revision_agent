@@ -29,6 +29,10 @@ def remove_implications(K, s):
     function, which given a set of belief bases K, and a sentence s 
     returns a set K' containing all k in K which do not imply s
     """
+
+    if len(K) == 0:
+        return []
+    
     s = [sympy.Not(s)]
     candidates = []
     for k in K:
@@ -81,6 +85,9 @@ def selection_function(KB, remainders):
     best_remainders = [r for r, _ in scores[:2]]
     return best_remainders
 
+def intersection(lst1, lst2):
+    lst3 = [value for value in lst1 if value in lst2]
+    return lst3
 
 def contract(KB, s):
     """
@@ -95,22 +102,25 @@ def contract(KB, s):
     _s = KB_copy.index(s)
     KB_copy[_s:_s+1] = []
 
+    if len(KB_copy) == 1:
+        return remove_implications(KB_copy, s)
+    
     # Limit removals
-    removals = 0
+    removals = 1
 
     # empty list to store candidates for remainder set
     candidates = []
 
-    if len(KB_copy) == 1:
-        return remove_implications
+    candidates = remove_implications([KB_copy], s)
 
     # while no candidstes are found, increase removals from belief base 
     while (len(candidates) == 0): 
-        removals += 1
 
         # compute powerset of KB with removals
         p = powerset(KB_copy, len(KB) - removals)
-
+        
+        removals += 1
+        
         candidates = (remove_implications(p, s))
     
     # Remove list in candidates that are strictly included in other list in candidates, to find remainders 
@@ -119,7 +129,8 @@ def contract(KB, s):
     # selection function returns two remainders for contraction
     best_remainders = selection_function(KB, remainders)
 
-    contraction = intersection(best_remainders[0], best_remainders[1])
+    # The contraction is the intersection of the selected remainders
+    contraction = list(set(best_remainders[0]).intersection(*best_remainders[1:]))
 
     AGM_Rationality_Postulates_for_contraction(KB, s, contraction)
 
