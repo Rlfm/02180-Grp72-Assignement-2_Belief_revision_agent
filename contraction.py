@@ -1,4 +1,4 @@
-import sympy
+from sympy import to_cnf, to_dnf, Not
 from sympy_demo import KB, expr1, symbols
 from DPLL import DPLL
 from entrenchment import reorder_expressions
@@ -9,7 +9,7 @@ def AGM_Rationality_Postulates_for_contraction(KB, expr, KB_post_contraction):
     """
     functions that asses that AGM postulates are respected for the present contraction 
     """
-    expr = sympy.to_cnf(expr)
+    expr = to_cnf(expr)
     # Success
     assert expr not in KB_post_contraction, f"{expr} is still part of KB after contraction"
 
@@ -21,6 +21,8 @@ def AGM_Rationality_Postulates_for_contraction(KB, expr, KB_post_contraction):
         assert KB == KB_post_contraction, f"KB was modified but {expr} wasn't in KB"
 
     # Extensionality
+    expr2 = to_dnf(expr)
+    assert KB_post_contraction == contract(KB, expr2), "The outcomes of contracting with equivalent sentences are not equal"
 
 
 
@@ -33,7 +35,7 @@ def remove_implications(K, s):
     if len(K) == 0:
         return []
     
-    s = [sympy.Not(s)]
+    s = [Not(s)]
     candidates = []
     for k in K:
         #F = [meet(k + s)]
@@ -70,12 +72,12 @@ def selection_function(KB, remainders):
     scores = []
     for r in remainders:
         # r_max_score; the score of most entreched belief contained in r 
-        r_max_score = max([entrenchment_order.index(s) for s in r]) if r else 0
+        r_max = max([entrenchment_order.index(s) for s in r]) if r else 0
         # r_avg_score; avareage of scores of all beliefs in r
-        r_avg_score = sum([entrenchment_order.index(s) for s in r]) / len(r) if r else 0
+        r_avg = sum([entrenchment_order.index(s) for s in r]) / len(r) if r else 0
 
         # total score of r, is a weitghted sum  of r_max_score and r_avg_score
-        score = 0.6 * r_max_score + 0.4 * r_avg_score 
+        score = 0.6 * r_max + 0.4 * r_avg 
         scores.append((r, score))
     
     # the remainders er sorted based scores
@@ -95,10 +97,13 @@ def contract(KB, s):
     Returns contraction by a sentence s, of belief base KB. 
     """
 
-    s = sympy.to_cnf(s)
+    s = to_cnf(s)
 
     KB_copy = KB.copy()
 
+    if not s in KB :
+        return KB
+    
     _s = KB_copy.index(s)
     KB_copy[_s:_s+1] = []
 
@@ -137,8 +142,8 @@ def contract(KB, s):
     return contraction
 
 
-print(f"{KB=} and {expr1=}")
-print(contract(KB, expr1))
+#print(f"{KB=} and {expr1=}")
+#print(contract(KB, expr1))
     
     
 

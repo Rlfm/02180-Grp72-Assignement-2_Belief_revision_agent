@@ -1,6 +1,6 @@
 from contraction import contract
-from sympy import to_cnf, Not, simplify
-from sympy_demo import KB, E, C
+from sympy import to_cnf, to_dnf, Not
+from sympy_demo import KB, F, C
 from DPLL import DPLL
 
 def AGM_Rationality_Postulates_for_expansion(KB, expr, KB_post_expansion):
@@ -22,6 +22,8 @@ def AGM_Rationality_Postulates_for_expansion(KB, expr, KB_post_expansion):
         assert consistensy(KB_post_expansion), f"{expr} is consisten but, KB after expansion is not"
     
     # Extensionality
+    expr2 = to_dnf(expr)
+    assert KB_post_expansion == expand(KB, expr2), "The outcomes of contracting with equivalent sentences are not equal"
 
 def consistensy(Set):
     """
@@ -30,28 +32,20 @@ def consistensy(Set):
     result, list = DPLL(set)
     return result
 
-def add_sentence(KB,s):
-    """
-    returns union of knowlegde base KB and sentence s.
-    """
-    return KB.append(s)
-
 def expand(KB, s):
     """
-    Expasion of knowlegde by KB, by a sentence s .
+    Expasion of beliefs, by a sentence s.
     """
     s = to_cnf(s)
     neg_s = to_cnf(Not(s))
 
     if s not in KB: 
         KB = contract(KB, neg_s)
-        KB = add_sentence(KB, s)
+        KB.append(s)
+        return KB
 
     return KB
 
 
-
-
-
-
-
+#expr = F >> C
+#print(expand(KB, expr))
