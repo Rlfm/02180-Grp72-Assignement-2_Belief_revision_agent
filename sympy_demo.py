@@ -22,12 +22,12 @@ pre_KB = [expr1,expr2,expr3, expr4]
 test_KB = [expr4]
 KB = {sympy.to_cnf(expr) for expr in pre_KB}
 new_KB = FiniteSet(*KB)
-KB2 = new_KB.append(sympy.to_cnf(expr5))
+#KB2 = new_KB.append(sympy.to_cnf(expr5))
 
 symbols = new_KB.free_symbols
 KB1 = new_KB.subs({C: True, A: False})
 aaa = len(KB1.args)
-ss = {C: True, A: False}
+ss = {C: True, ~A: True}
 other_s = {i: True for i in symbols}
 new = ss | other_s
 new2 = other_s | ss

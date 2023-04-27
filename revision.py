@@ -1,37 +1,40 @@
 import sympy
-from sympy import FiniteSet, Intersection 
+from sympy import FiniteSet, Intersection, Union
 import entrenchment
 from DPLL import DPLL
 
-def find_propositions(knowledgeBase):
-    propositions = []
-    symbols = knowledgeBase.free_symbols
+def find_minimal_state(knowledgeBase):
+    #propositions = []
+    symbols_true = knowledgeBase.free_symbols
+    symbols_false = set()
     for formula in knowledgeBase:
-        if len(formula.args) == 1 and formula.is_not == True:
-            symbols.remove(formula.free_symbols)
-            symbols.add(formula)
-    for a in symbols:
-        propositions.append(a)
-    return propositions
+        if len(formula.args) == 1 and formula != formula.free_symbols:
+            symbols_true.remove(formula.args[0])
+            symbols_false = symbols_false | formula.free_symbols
+    minimal_state = {i: True for i in symbols_true}
+    add_state = {i: False for i in symbols_false}
+    minimal_state = minimal_state | add_state
+    return minimal_state
 
-def contraction_using_plausibility_order(knowledgeBase, new_belief):
-    propositions = find_propositions(knowledgeBase)
+def contraction_using_plausibility_order(knowledgeBase, new_belief, current_minimal_state):
+    propositions = current_minimal_state.keys()
     symbols = new_belief.free_symbols
     s = DPLL([new_belief],symbols)
     rs = s[1].keys()
     list_other_s = propositions
-    for i in rs:
-        list_other_s.remove(i)
-    other_s = {i: True for i in list_other_s}
+    #for i in rs:
+    #    list_other_s.remove(i)
+    #other_s = {i: True for i in list_other_s}
+    other_s = current_minimal_state
     state = other_s | s[1]
     beliefBase_state = knowledgeBase.subs(state)
     KB = []
-    for k in range(0,len(beliefBase_state.args)):
-        if beliefBase_state.args[k] == True:
-            KB.append(beliefBase_state.args[k])
+    for k in range(0,len(knowledgeBase.args)):
+        if knowledgeBase.args[k].subs(state) == True:
+            KB.append(knowledgeBase.args[k])
     KB = FiniteSet(*KB)
     knowledgeBase = Intersection(knowledgeBase,KB)
-    return knowledgeBase
+    return knowledgeBase, state
 
 def adding_new(knowledgeBase, new_belief):
     KB = []
@@ -41,11 +44,11 @@ def adding_new(knowledgeBase, new_belief):
     knowledgeBase = FiniteSet(*KB)
     return knowledgeBase
 
-def revision(knowledgeBase, new_belief):
-    not_new_belief = sympy.simplify(sympy.Not(new_belief))
-    knowledgeBase = contraction_using_plausibility_order(knowledgeBase,not_new_belief)
+def revision(knowledgeBase, new_belief, current_minimal_state):
+    #not_new_belief = sympy.simplify(sympy.Not(new_belief))
+    knowledgeBase, minimal_state_after_revision = contraction_using_plausibility_order(knowledgeBase,new_belief, current_minimal_state)
     knowledgeBase = adding_new(knowledgeBase,new_belief)
-    return knowledgeBase
+    return knowledgeBase, minimal_state_after_revision
 
 def partial_m_contraction(belief_set,exp):
     remainders = []
@@ -54,7 +57,7 @@ def partial_m_contraction(belief_set,exp):
             remainders.append(belief)
     return remainders        
 
-def revision(belief_set,new_belief, symbols):
+def old_revision(belief_set,new_belief, symbols):
     not_subset = []
     inconsistency = []
     for belief in belief_set:
