@@ -26,7 +26,7 @@ def contraction_using_plausibility_order(knowledgeBase, new_belief):
     state = other_s | s[1]
     beliefBase_state = knowledgeBase.subs(state)
     KB = []
-    for k in range(0,len(beliefBase_state.args)-1):
+    for k in range(0,len(beliefBase_state.args)):
         if beliefBase_state.args[k] == True:
             KB.append(beliefBase_state.args[k])
     KB = FiniteSet(*KB)
