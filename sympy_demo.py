@@ -15,12 +15,14 @@ expr1 = sympy.Implies(A,B)
 expr2 = sympy.Not(B)
 expr3 = A
 expr4 = sympy.And(C, A)
+expr5 = C
 
 #pre_KB = [expr1,expr2,expr3,expr4,expr5,expr6]
 pre_KB = [expr1,expr2,expr3, expr4]
 test_KB = [expr4]
 KB = {sympy.to_cnf(expr) for expr in pre_KB}
 new_KB = FiniteSet(*KB)
+KB2 = new_KB.append(sympy.to_cnf(expr5))
 
 symbols = new_KB.free_symbols
 KB1 = new_KB.subs({C: True, A: False})

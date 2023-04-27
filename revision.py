@@ -1,5 +1,5 @@
 import sympy
-from sympy import FiniteSet
+from sympy import FiniteSet, Intersection 
 import entrenchment
 from DPLL import DPLL
 
@@ -25,15 +25,27 @@ def contraction_using_plausibility_order(knowledgeBase, new_belief):
     other_s = {i: True for i in list_other_s}
     state = other_s | s[1]
     beliefBase_state = knowledgeBase.subs(state)
-    score = 0
     KB = []
     for k in range(0,len(beliefBase_state.args)-1):
         if beliefBase_state.args[k] == True:
             KB.append(beliefBase_state.args[k])
-    
-    plausible_world = FiniteSet(propositions)
+    KB = FiniteSet(*KB)
+    knowledgeBase = Intersection(knowledgeBase,KB)
+    return knowledgeBase
 
+def adding_new(knowledgeBase, new_belief):
+    KB = []
+    for i in knowledgeBase:
+        KB.append(i)
+    KB.append(new_belief)
+    knowledgeBase = FiniteSet(*KB)
+    return knowledgeBase
 
+def revision(knowledgeBase, new_belief):
+    not_new_belief = sympy.simplify(sympy.Not(new_belief))
+    knowledgeBase = contraction_using_plausibility_order(knowledgeBase,not_new_belief)
+    knowledgeBase = adding_new(knowledgeBase,new_belief)
+    return knowledgeBase
 
 def partial_m_contraction(belief_set,exp):
     remainders = []
