@@ -47,3 +47,6 @@ def expand(KB, s):
 
     return KB
 
+
+expr = F >> C
+print(expand(KB, expr))
