@@ -47,6 +47,6 @@ def expand(KB, s):
 
     return KB
 
-
-expr = F >> C
-print(expand(KB, expr))
+if __name__ =='__main__':
+    expr = F >> C
+    print(expand(KB, expr))

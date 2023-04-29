@@ -1,4 +1,3 @@
-import sympy
 import logging 
 
 level = logging.INFO	
