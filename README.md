@@ -11,7 +11,7 @@ Repository for group 77 work on Assignement 1 "Logical beliefs revision engine" 
 
 Make sure *sympy* is correctly installed.
 
-Then, simply run the following command in the installation folder with all the four python files:
+Then, simply run the following command in the installation folder containing all the python files:
 
 python BeliefBase.py
 
