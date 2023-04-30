@@ -2,7 +2,6 @@ import sympy
 from sympy import FiniteSet
 from DPLL import DPLL
 import revision
-import test_with_AGM
 
 # Define some symbols
 A, B, C, D, E, F = sympy.symbols('A B C D E F')
@@ -32,7 +31,6 @@ symbols = [i for i in symbols]
 KB_1 = revision.adding_new(new_KB, new_belief)
 test_KB = {k for k in KB_1}
 check_inconsistency = DPLL(test_KB,symbols)
-print(check_inconsistency)
 if check_inconsistency[0]==False:
     KB_1, current_minimal_state = revision.revision(new_KB, new_belief, current_minimal_state)
     print("After revision")
