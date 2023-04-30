@@ -2,6 +2,7 @@ import sympy
 from sympy import FiniteSet
 from DPLL import DPLL
 import revision
+import test_with_AGM
 
 # Define some symbols
 A, B, C, D, E, F = sympy.symbols('A B C D E F')
@@ -43,4 +44,3 @@ else:
     print("After revision")
     print(KB_1)
     print(current_minimal_state)
-

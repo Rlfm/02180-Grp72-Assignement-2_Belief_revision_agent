@@ -2,6 +2,7 @@ import sympy
 from sympy import FiniteSet, Intersection, Union
 import entrenchment
 from DPLL import DPLL
+import test_with_AGM
 
 def find_minimal_state(knowledgeBase):
     #propositions = []
@@ -33,58 +34,21 @@ def contraction_using_plausibility_order(knowledgeBase, new_belief, current_mini
         if knowledgeBase.args[k].subs(state) == True:
             KB.append(knowledgeBase.args[k])
     KB = FiniteSet(*KB)
-    knowledgeBase = Intersection(knowledgeBase,KB)
-    return knowledgeBase, state
+    new_knowledgeBase = Intersection(knowledgeBase,KB)
+    test_with_AGM.AGM_Rationality_Postulates_for_contraction(knowledgeBase, new_belief, new_knowledgeBase, current_minimal_state)
+    return new_knowledgeBase, state
 
 def adding_new(knowledgeBase, new_belief):
     KB = []
     for i in knowledgeBase:
         KB.append(i)
     KB.append(new_belief)
-    knowledgeBase = FiniteSet(*KB)
-    return knowledgeBase
+    new_knowledgeBase = FiniteSet(*KB)
+    test_with_AGM.AGM_Rationality_Postulates_for_expansion(knowledgeBase, new_belief, knowledgeBase)
+    return new_knowledgeBase
 
 def revision(knowledgeBase, new_belief, current_minimal_state):
     #not_new_belief = sympy.simplify(sympy.Not(new_belief))
-    knowledgeBase, minimal_state_after_revision = contraction_using_plausibility_order(knowledgeBase,new_belief, current_minimal_state)
+    knowledgeBase, minimal_state_after_revision = contraction_using_plausibility_order(knowledgeBase, new_belief, current_minimal_state)
     knowledgeBase = adding_new(knowledgeBase,new_belief)
     return knowledgeBase, minimal_state_after_revision
-
-def partial_m_contraction(belief_set,exp):
-    remainders = []
-    for belief in belief_set:
-        if sympy.simplify(sympy.Implies(belief,exp)) == False:
-            remainders.append(belief)
-    return remainders        
-
-def old_revision(belief_set,new_belief, symbols):
-    not_subset = []
-    inconsistency = []
-    for belief in belief_set:
-        two_exp = [belief,new_belief]
-        k = DPLL(two_exp,symbols)
-        if k[0] == False:
-            not_subset.append(belief)
-        else:
-            inconsistency.append(belief)
-    if len(inconsistency)==0:
-        belief_set.append(new_belief)
-        new_belief_set = belief_set
-        return new_belief_set
-    else:
-        for a in inconsistency:
-            for i in range(0,len(a.args)):
-                two_exp = [a.args[i],new_belief]
-                k = DPLL(two_exp,symbols)
-                if k[0]==False:
-                    if a.args[i].atoms()==1:
-                        a.args[i] = new_belief
-        sorted_subset = entrenchment.reorder_expressions(inconsistency)
-        sorted_subset.reverse()
-        for test in sorted_subset:
-            test_set = sorted_subset
-            test_set.remove(test)
-            new_belief_set = test_set
-            new_belief_set.extend(not_subset) 
-            k = DPLL(new_belief_set,symbols)
-
