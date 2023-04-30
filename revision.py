@@ -2,7 +2,7 @@ import sympy
 from sympy import FiniteSet, Intersection, Union
 import entrenchment
 from DPLL import DPLL
-import test_with_AGM
+import AGM_postulates
 
 def find_minimal_state(knowledgeBase):
     #propositions = []
@@ -35,7 +35,7 @@ def contraction_using_plausibility_order(knowledgeBase, new_belief, current_mini
             KB.append(knowledgeBase.args[k])
     KB = FiniteSet(*KB)
     new_knowledgeBase = Intersection(knowledgeBase,KB)
-    test_with_AGM.AGM_Rationality_Postulates_for_contraction(knowledgeBase, new_belief, new_knowledgeBase, current_minimal_state)
+    AGM_postulates.AGM_Rationality_Postulates_for_contraction(knowledgeBase, new_belief, new_knowledgeBase, current_minimal_state)
     return new_knowledgeBase, state
 
 def adding_new(knowledgeBase, new_belief):
@@ -44,7 +44,7 @@ def adding_new(knowledgeBase, new_belief):
         KB.append(i)
     KB.append(new_belief)
     new_knowledgeBase = FiniteSet(*KB)
-    test_with_AGM.AGM_Rationality_Postulates_for_expansion(knowledgeBase, new_belief, knowledgeBase)
+    AGM_postulates.AGM_Rationality_Postulates_for_expansion(knowledgeBase, new_belief, knowledgeBase)
     return new_knowledgeBase
 
 def revision(knowledgeBase, new_belief, current_minimal_state):
