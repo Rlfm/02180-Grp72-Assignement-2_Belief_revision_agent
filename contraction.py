@@ -1,11 +1,11 @@
-from sympy import to_cnf, to_dnf, Not, Equivalent
+from sympy import to_cnf, Not, Equivalent
 from sympy_demo import test_expr2, symbols
 from DPLL import DPLL
 from entrenchment import reorder_expressions
 from itertools import chain, combinations
 
 
-def AGM_Rationality_Postulates_for_contraction(KB, expr, KB_post_contraction):
+def AGM_Rationality_Postulates_for_contraction(KB, expr,test_expr, KB_post_contraction):
     """
     functions that asses that AGM postulates are respected for the present contraction 
     """
@@ -21,7 +21,8 @@ def AGM_Rationality_Postulates_for_contraction(KB, expr, KB_post_contraction):
         assert set(KB) == set(KB_post_contraction), f"KB was modified but {expr} is not in Cn(KB)"
 
     # Extensionality
-    assert set(KB_post_contraction) == set(contract(KB, test_expr2)), "The outcomes of contracting with equivalent sentences are not equal"
+    test_set = contract(KB, test_expr)
+    assert KB_post_contraction == test_set, "The outcomes of contracting with equivalent sentences are not equal"
 
 
 
@@ -110,7 +111,7 @@ def contract(KB, s):
 
     KB_copy = KB.copy()
 
-    if entailment(KB, s):
+    if not entailment(KB, s):
         return KB
     
     if s in KB:
@@ -146,8 +147,6 @@ def contract(KB, s):
 
     # The contraction is the intersection of the selected remainders
     contraction = list(set(best_remainders[0]).intersection(*best_remainders[1:]))
-
-    AGM_Rationality_Postulates_for_contraction(KB, s, contraction)
 
     return contraction
 

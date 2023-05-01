@@ -1,5 +1,5 @@
 """
-Initializastion of belief base
+Initialization of belief base
 """
 
 import sympy
@@ -20,19 +20,7 @@ KB = [sympy.to_cnf(expr) for expr in pre_KB]
 
 symbols = [A, B, C, D, E, F]
 
-# define test expression for AGM postulates
-test_expr = F >> C
+# define test expression for AGM postulates tests
+test_expr0 = sympy.And(A,B)
+test_expr1 = sympy.And(B,A)
 test_expr2 = sympy.Equivalent(A,(E | C))
-
-# Print the expressions
-for i,expr in enumerate(KB):
-    print(f"Expression {i} {expr}")
-
-print(f"original {KB=}")
-
-DPLL_return = DPLL(KB,symbols)
-
-print(f"{DPLL(KB,symbols)=}")
-
-for i,expr in enumerate(KB):
-    print(f"Expression {i} {expr} -> with DPLL proposed model: {expr.subs(DPLL_return[1])}")
