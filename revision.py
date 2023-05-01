@@ -1,6 +1,5 @@
 import sympy
 from sympy import FiniteSet, Intersection, to_cnf, to_dnf
-import entrenchment
 from DPLL import DPLL
 
 def find_minimal_state(knowledgeBase):
