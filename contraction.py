@@ -1,5 +1,5 @@
 from sympy import to_cnf, Not
-from sympy_demo import symbols
+from belief_base import symbols
 from DPLL import DPLL
 from entrenchment import reorder_expressions
 from itertools import chain, combinations

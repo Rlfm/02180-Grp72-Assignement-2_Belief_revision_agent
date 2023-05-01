@@ -1,6 +1,6 @@
 from contraction import contract
 from sympy import to_cnf, Not
-from sympy_demo import symbols
+from belief_base import symbols
 from DPLL import DPLL
 
 def AGM_Rationality_Postulates_for_expansion(KB, expr, test_expr, KB_post_expansion):

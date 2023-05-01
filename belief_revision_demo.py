@@ -6,7 +6,7 @@ import sympy
 from DPLL import DPLL
 from contraction import contract, AGM_Rationality_Postulates_for_contraction
 from revision import expand, AGM_Rationality_Postulates_for_expansion
-from sympy_demo import KB, symbols, expr1, test_expr0, test_expr1, test_expr2
+from belief_base import KB, symbols, expr1, test_expr0, test_expr1, test_expr2
 
 def showKB():
     """

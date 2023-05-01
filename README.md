@@ -8,7 +8,7 @@ Make sure *sympy* is correctly installed.
 
 Then, simply run the following command in the installation folder containing all the python files:
 
-python BeliefBase.py
+python belief_revision_demo.py
 
 **Included Python files**
 
