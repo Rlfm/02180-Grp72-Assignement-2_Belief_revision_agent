@@ -6,7 +6,7 @@ import sympy
 from DPLL import DPLL
 from contraction import contract, AGM_Rationality_Postulates_for_contraction
 from revision import expand, AGM_Rationality_Postulates_for_expansion
-from belief_base import KB, symbols, expr1, test_expr0, test_expr1, test_expr2
+from belief_base import KB, symbols, expr1, test_expr0, test_expr1, test_expr2, test_expr3, test_expr4
 
 def showKB():
     """
@@ -44,7 +44,11 @@ expandedKB = expandKB(KB, test_expr0)
 print(expandedKB)
 AGM_Rationality_Postulates_for_expansion(KB, test_expr0, test_expr1, expandedKB)
 print()
-
+print(f"Expand KB by sentence s = {test_expr3}")
+expandedKB = expandKB(KB, test_expr3)
+print(expandedKB)
+AGM_Rationality_Postulates_for_expansion(KB, test_expr3, test_expr4, expandedKB)
+print()
 print(f"Contract KB by sentence s = {expr1}")
 contractedKB = contractKB(KB, expr1)
 print(contractedKB)

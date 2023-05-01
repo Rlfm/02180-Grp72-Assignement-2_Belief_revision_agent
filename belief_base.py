@@ -24,3 +24,5 @@ symbols = [A, B, C, D, E, F]
 test_expr0 = sympy.And(A,B)
 test_expr1 = sympy.And(B,A)
 test_expr2 = sympy.Equivalent(A,(E | C))
+test_expr3 = F >> C
+test_expr4 = sympy.Not(F) >> sympy.Not(C)
