@@ -1,11 +1,11 @@
-from sympy import to_cnf, Not, Equivalent
-from sympy_demo import test_expr2, symbols
+from sympy import to_cnf, Not
+from sympy_demo import symbols
 from DPLL import DPLL
 from entrenchment import reorder_expressions
 from itertools import chain, combinations
 
 
-def AGM_Rationality_Postulates_for_contraction(KB, expr,test_expr, KB_post_contraction):
+def AGM_Rationality_Postulates_for_contraction(KB, expr, test_expr, KB_post_contraction):
     """
     functions that asses that AGM postulates are respected for the present contraction 
     """
@@ -66,7 +66,7 @@ def selection_function(KB, remainders):
     """
 
     # reorder the beliefs in base, from least to most entrenched
-    # the score of each belief correspond to its index in the reordered belief base
+    # the score of each belief corresponds to its index in the reordered belief base
     entrenchment_order = reorder_expressions(KB)
     entrenchment_order.reverse()
 
@@ -111,13 +111,16 @@ def contract(KB, s):
 
     KB_copy = KB.copy()
 
+    # if s is not in Cn(Kb) we do nothing
     if not entailment(KB, s):
         return KB
     
+    # remove s from KB
     if s in KB:
         _s = KB_copy.index(s)
         KB_copy[_s:_s+1] = []
 
+    # if there is only one belief in KB, we simply remove implication and return
     if len(KB_copy) == 1:
         return remove_implications(KB_copy, s)
     
