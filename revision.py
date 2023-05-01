@@ -1,9 +1,9 @@
 from contraction import contract
-from sympy import to_cnf, to_dnf, Not
-from sympy_demo import KB, F, C
+from sympy import to_cnf, Not
+from sympy_demo import KB, F, C, symbols
 from DPLL import DPLL
 
-def AGM_Rationality_Postulates_for_expansion(KB, expr, KB_post_expansion):
+def AGM_Rationality_Postulates_for_expansion(KB, expr, test_expr, KB_post_expansion):
     """
     functions that asses that AGM postulates are respected for the present expansion. 
     """
@@ -12,25 +12,25 @@ def AGM_Rationality_Postulates_for_expansion(KB, expr, KB_post_expansion):
 
     # Inclusion
     
-    assert all(x in KB.copy().append(expr) for x in KB_post_expansion), "KB after revision is not a subset of original KB after expansion"
+    assert all(x in KB for x in KB_post_expansion), f"KB after revision is not a subset of original KB {KB} after expansion"
 
     # Vacuity
     if Not(expr) not in KB:
         assert KB == KB_post_expansion, "KB was modified but neg{expr} wasn't in KB"
 
     # Consistency
-    if consistensy(expr):
-        assert consistensy(KB_post_expansion), f"{expr} is consisten but, KB after expansion is not"
+    _expr = [to_cnf(expr)]
+    if consistensy(_expr):
+        assert consistensy(KB_post_expansion), f"{expr} is consisten but, KB after expansion {KB_post_expansion} is not"
     
     # Extensionality
-    expr2 = to_dnf(expr)
-    assert KB_post_expansion == expand(KB, expr2), "The outcomes of contracting with equivalent sentences are not equal"
+    assert KB_post_expansion == expand(KB, test_expr), "The outcomes of contracting with equivalent sentences are not equal"
 
 def consistensy(set_):
     """
     Returns if a set of beliefs is consistent.
     """
-    result, list = DPLL(set_)
+    result, list = DPLL(set_, symbols)
     return result
 
 def expand(KB, s):
@@ -41,12 +41,8 @@ def expand(KB, s):
     neg_s = to_cnf(Not(s))
 
     if s not in KB: 
-        KB = contract(KB, neg_s)
-        KB.append(s)
+        contracted_KB = contract(KB, neg_s)
+        contracted_KB.append(s)
         return KB
 
     return KB
-
-if __name__ =='__main__':
-    expr = F >> C
-    print(expand(KB, expr))
