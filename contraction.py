@@ -141,9 +141,6 @@ def contract(KB, s):
 
     return contraction
 
-if __name__ =='__main__':
-    print(f"{KB=} and {expr1=}")
-    print(contract(KB, expr1))
         
     
 
