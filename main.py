@@ -28,7 +28,7 @@ print("Before revision")
 print(agent_KB)
 print(current_minimal_state)
 
-# The below line of code performs revision
+# The below lines of code performs revision to the Agent beliefs according to the new coming belief
 new_belief = add_expr_1
 symbols = symbols | new_belief.free_symbols
 symbols = [i for i in symbols]
