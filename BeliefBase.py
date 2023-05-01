@@ -1,5 +1,5 @@
 """
-Belief Base
+Functions for calling beliefrevision
 """
 
 import sympy
@@ -33,8 +33,8 @@ def expandKB(KB, s):
     print(expand(KB, s))
 
 
-print(f"Expand KB={KB} by sentence s={test_expr}")
+print(f"Expand KB by sentence s = {test_expr}")
 expandKB(KB, test_expr)
 
-print(f"Contract KB: {KB} by sentence s: {expr1}")
+print(f"Contract KB by sentence s = {expr1}")
 contractKB(KB, expr1)
