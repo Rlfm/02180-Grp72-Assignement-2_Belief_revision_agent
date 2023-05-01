@@ -16,7 +16,7 @@ expr6 = C
 expr7 = sympy.Not(sympy.Or(C, A))
 
 # New belief which needs to be added to the agent beliefs
-add_expr_1 = sympy.to_cnf(expr7)
+new_belief = sympy.to_cnf(expr7)
 
 # Initializing knowledge base of the agent and minimal state
 pre_KB = [expr3, expr5, expr6]
@@ -29,7 +29,6 @@ print(agent_KB)
 print(current_minimal_state)
 
 # The below lines of code performs revision to the Agent beliefs according to the new coming belief
-new_belief = add_expr_1
 symbols = symbols | new_belief.free_symbols
 symbols = [i for i in symbols]
 KB_1 = revision.adding_new(agent_KB, new_belief)
