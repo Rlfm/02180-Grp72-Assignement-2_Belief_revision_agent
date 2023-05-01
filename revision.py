@@ -15,8 +15,8 @@ def AGM_Rationality_Postulates_for_expansion(KB, expr, KB_post_expansion):
     assert all(x in KB.copy().append(expr) for x in KB_post_expansion), "KB after revision is not a subset of original KB after expansion"
 
     # Vacuity
-    if expr not in KB:
-        assert KB == KB_post_expansion, "KB was modified but {expr} wasn't in KB"
+    if Not(expr) not in KB:
+        assert KB == KB_post_expansion, "KB was modified but neg{expr} wasn't in KB"
 
     # Consistency
     if consistensy(expr):
@@ -26,11 +26,11 @@ def AGM_Rationality_Postulates_for_expansion(KB, expr, KB_post_expansion):
     expr2 = to_dnf(expr)
     assert KB_post_expansion == expand(KB, expr2), "The outcomes of contracting with equivalent sentences are not equal"
 
-def consistensy(Set):
+def consistensy(set_):
     """
     Returns if a set of beliefs is consistent.
     """
-    result, list = DPLL(set)
+    result, list = DPLL(set_)
     return result
 
 def expand(KB, s):

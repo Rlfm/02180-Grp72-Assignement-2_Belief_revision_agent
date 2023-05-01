@@ -1,7 +1,12 @@
 # 02180-Grp72-Assignement-2
 
-**Method I: Belief revision based on partial meet contraction and entrenchment**
 
+
+DELETE BEFORE SUBMITTING Overleaf report link: https://www.overleaf.com/8126874128sdxjnwffvtqf
+
+Repository for group 77 work on Assignement 1 "Logical beliefs revision engine" of the class "02180 Introduction to AI, SP23".
+
+  
 **How to run the script**
 
 Make sure *sympy* is correctly installed.

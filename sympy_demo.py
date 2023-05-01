@@ -1,6 +1,10 @@
+"""
+Initializastion of belief base
+"""
+
 import sympy
 from DPLL import DPLL
-# Define some symbols
+# Define symbols
 A, B, C, D, E, F = sympy.symbols('A B C D E F')
 
 expr1 = sympy.Equivalent(A,(C | E))
@@ -11,9 +15,15 @@ expr5 = C >> F
 expr6 = C >> B
 
 pre_KB = [expr1,expr2,expr3,expr4,expr5,expr6]
+# convert sentence into cnf 
 KB = [sympy.to_cnf(expr) for expr in pre_KB]
 
 symbols = [A, B, C, D, E, F]
+
+# define test expression for AGM postulates
+test_expr = F >> C
+test_expr2 = sympy.Equivalent(A,(E | C))
+
 # Print the expressions
 for i,expr in enumerate(KB):
     print(f"Expression {i} {expr}")
