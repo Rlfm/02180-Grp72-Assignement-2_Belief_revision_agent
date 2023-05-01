@@ -2,7 +2,7 @@ from sympy import to_cnf, to_dnf, Not
 from sympy_demo import KB, expr1, symbols
 from DPLL import DPLL
 from entrenchment import reorder_expressions
-from itertools import chain, combinations, product
+from itertools import chain, combinations
 
 
 def AGM_Rationality_Postulates_for_contraction(KB, expr, KB_post_contraction):

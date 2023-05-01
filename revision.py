@@ -26,11 +26,11 @@ def AGM_Rationality_Postulates_for_expansion(KB, expr, KB_post_expansion):
     expr2 = to_dnf(expr)
     assert KB_post_expansion == expand(KB, expr2), "The outcomes of contracting with equivalent sentences are not equal"
 
-def consistensy(Set):
+def consistensy(set_):
     """
     Returns if a set of beliefs is consistent.
     """
-    result, list = DPLL(set)
+    result, list = DPLL(set_)
     return result
 
 def expand(KB, s):
