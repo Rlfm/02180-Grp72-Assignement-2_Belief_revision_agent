@@ -15,8 +15,8 @@ def AGM_Rationality_Postulates_for_expansion(KB, expr, KB_post_expansion):
     assert all(x in KB.copy().append(expr) for x in KB_post_expansion), "KB after revision is not a subset of original KB after expansion"
 
     # Vacuity
-    if expr not in KB:
-        assert KB == KB_post_expansion, "KB was modified but {expr} wasn't in KB"
+    if Not(expr) not in KB:
+        assert KB == KB_post_expansion, "KB was modified but neg{expr} wasn't in KB"
 
     # Consistency
     if consistensy(expr):

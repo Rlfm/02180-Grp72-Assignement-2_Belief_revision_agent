@@ -14,6 +14,10 @@ pre_KB = [expr1,expr2,expr3,expr4,expr5,expr6]
 KB = [sympy.to_cnf(expr) for expr in pre_KB]
 
 symbols = [A, B, C, D, E, F]
+
+test_expr = F >> C
+test_expr2 = sympy.Equivalent(A,(E | C))
+
 # Print the expressions
 for i,expr in enumerate(KB):
     print(f"Expression {i} {expr}")

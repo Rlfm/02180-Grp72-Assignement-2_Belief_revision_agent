@@ -1,5 +1,5 @@
-from sympy import to_cnf, to_dnf, Not
-from sympy_demo import KB, expr1, symbols
+from sympy import to_cnf, to_dnf, Not, Equivalent
+from sympy_demo import test_expr2, symbols
 from DPLL import DPLL
 from entrenchment import reorder_expressions
 from itertools import chain, combinations
@@ -17,12 +17,11 @@ def AGM_Rationality_Postulates_for_contraction(KB, expr, KB_post_contraction):
     assert len([x for x in KB_post_contraction if x in KB]) == len(KB_post_contraction), "KB after contraction is not a subset of original KB"
 
     # Vacuity 
-    if expr not in KB:
-        assert KB == KB_post_contraction, f"KB was modified but {expr} wasn't in KB"
+    if not entailment(KB, expr):
+        assert set(KB) == set(KB_post_contraction), f"KB was modified but {expr} is not in Cn(KB)"
 
     # Extensionality
-    expr2 = to_dnf(expr)
-    assert KB_post_contraction == contract(KB, expr2), "The outcomes of contracting with equivalent sentences are not equal"
+    assert set(KB_post_contraction) == set(contract(KB, test_expr2)), "The outcomes of contracting with equivalent sentences are not equal"
 
 
 
@@ -59,6 +58,7 @@ def intersection(r1, r2):
     r3 = [value for value in r1 if value in r2]
     return r3
 
+
 def selection_function(KB, remainders):
     """
     Selection function, returns the two best remainders based on entrencment ordering.
@@ -91,6 +91,15 @@ def intersection(lst1, lst2):
     lst3 = [value for value in lst1 if value in lst2]
     return lst3
 
+def entailment(lst, s):
+    """
+    Checks if lst entails s, returns True if entailment is found. 
+    """
+    _s = [Not(s)]
+    lst = lst + _s
+    SAT, base = DPLL(lst, symbols)
+    return not SAT
+
 def contract(KB, s):
     """
     Partial meet conatraction on belief base. 
@@ -101,11 +110,12 @@ def contract(KB, s):
 
     KB_copy = KB.copy()
 
-    if not s in KB :
+    if entailment(KB, s):
         return KB
     
-    _s = KB_copy.index(s)
-    KB_copy[_s:_s+1] = []
+    if s in KB:
+        _s = KB_copy.index(s)
+        KB_copy[_s:_s+1] = []
 
     if len(KB_copy) == 1:
         return remove_implications(KB_copy, s)
