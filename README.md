@@ -1,11 +1,6 @@
 # 02180-Grp72-Assignement-2
 
-
-
-DELETE BEFORE SUBMITTING Overleaf report link: https://www.overleaf.com/8126874128sdxjnwffvtqf
-
-Repository for group 77 work on Assignement 1 "Logical beliefs revision engine" of the class "02180 Introduction to AI, SP23".
-
+**Method I: Belief Revision based on partial meet contraction and entrenchment**
   
 **How to run the script**
 
