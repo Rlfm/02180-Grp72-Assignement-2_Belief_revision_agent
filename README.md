@@ -5,7 +5,7 @@
 DELETE BEFORE SUBMITTING Overleaf report link: https://www.overleaf.com/8126874128sdxjnwffvtqf
 DELETE BEFORE SUBMITTING Overleaf report link: https://www.overleaf.com/8414895255qxfddxbfwxxm
 
-Repository for group 77 work on Assignement 1 "Logical beliefs revision engine" of the class "02180 Introduction to AI, SP23".
+Repository for group 72 work on Assignement 1 "Logical beliefs revision engine" of the class "02180 Introduction to AI, SP23".
 
   
 **How to run the script**
